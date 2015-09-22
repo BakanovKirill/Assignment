@@ -55,3 +55,17 @@ docs/_build/
 
 # PyBuilder
 target/
+
+
+*.pyc
+*.pyo
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info
+*.sqlite3
+.idea/
