@@ -2,14 +2,12 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 import assignment.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -17,10 +15,12 @@ class Migration(migrations.Migration):
             name='Currency',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=100)),
-                ('short_name', models.CharField(max_length=3)),
-                ('rate', models.DecimalField(max_digits=8, decimal_places=2)),
+                ('name', models.CharField(max_length=3)),
+                ('rate', models.DecimalField(max_digits=6, decimal_places=4)),
             ],
+            options={
+                'verbose_name_plural': 'Currencies',
+            },
             bases=(assignment.models.UnicodeNameMixin, models.Model),
         ),
         migrations.CreateModel(
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
-                ('total', models.DecimalField(max_digits=10, decimal_places=2)),
+                ('total', models.DecimalField(null=True, max_digits=10, decimal_places=2, blank=True)),
             ],
             bases=(assignment.models.UnicodeNameMixin, models.Model),
         ),
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
-                ('fee', models.ForeignKey(to='assignment.Fee')),
+                ('fee', models.ForeignKey(blank=True, to='assignment.Fee', null=True)),
             ],
             bases=(assignment.models.UnicodeNameMixin, models.Model),
         ),
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('quantity', models.PositiveIntegerField(default=1)),
-                ('event', models.ForeignKey(related_name='products', to='assignment.Event')),
+                ('event', models.ForeignKey(related_name='product_items', to='assignment.Event')),
                 ('product', models.ForeignKey(related_name='items', to='assignment.Product')),
             ],
         ),
@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='event',
-            name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            name='products',
+            field=models.ManyToManyField(to='assignment.Product', through='assignment.ProductItem'),
         ),
     ]

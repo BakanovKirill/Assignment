@@ -1,17 +1,77 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n staticfiles %}
 
 
 {% block content %}
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Main application page</h1>
+            <h1>{% trans 'Main application page' %}</h1>
 
         </div>
 
-        <h2>{{ event.name }}</h2>
-        {% for p in items %}
-            <p>{{ p }}</p>
+
+        <label for="event-select">{% trans 'Choose Event' %}</label>&nbsp;
+        <select id="event-select" name="event">
+            {% for event in events %}
+                <option value="{{ event.id }}">{{ event.name }}</option>
+            {% endfor %}
+        </select>
+
+
+
+        {% for event in events %}
+            {% with id=event.id %}
+                <form method="post" action="" name="event-form" id="eventForm{{ id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ id }}"/>
+
+                    <div class="products" id="{{ id }}" {% if not forloop.first %}style="display: none;"{% endif %}>
+                        {% for product in event.product_items.all %}
+                            <div class="product clearfix">
+                                <label for="product{{ product.id }}">{% trans 'Product' %}: {{ product.product.name }}</label>
+                                <input title="{% trans 'quantity' %}" id="product{{ product.id }}" class="span8" type="text" value="{{ product.quantity }}" disabled />
+                                <input type="text" title="{% trans 'fee' %}" disabled value="{% if product.product.fee %}{{ product.product.fee }}{% else %}{{ event.fee }}{% endif %}"/>
+                            </div>
+                        {% endfor %}
+
+                        <input type="submit" value="{% trans 'Show total' %}" data-target=""/>
+                        <div class="total" style="display: none;">
+                            {% trans 'Total' %}: <span class="amount"></span> $
+                        </div>
+                    </div>
+                </form>
+
+            {% endwith %}
+
         {% endfor %}
+
+        <div class="diagram">
+            <a href="{% static 'img/diagram.png' %}" target="_blank">{% trans 'Click to open database diagram' %}</a>
+        </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(function () {
+            $('#event-select').on('change', function () {
+                var value = $(this).val();
+                $('.products').hide();
+                $('.products input[type=checkbox]:checked').prop('checked', false).trigger('change');
+                $('#' + value).show();
+            });
+
+            $('form').on('submit', function () {
+                var form = $(this),
+                postData = form.serialize();
+                $.post(form.attr('action'), postData, function (data) {
+                    var el = form.find('.total .amount');
+                    el.text(data.total);
+                    el.parent().show();
+                });
+                return false;
+            })
+
+        });
+    </script>
 {% endblock %}

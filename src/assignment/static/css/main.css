@@ -1,0 +1,23 @@
+input[type=text] {
+    width: 80px;
+    margin-left: 20px;
+    text-align: center;
+    float: right;
+}
+
+input[type=submit] {
+    float: right;
+}
+
+.product {
+    margin-bottom: 10px;
+}
+
+.products {
+    margin-top: 10px;
+    width: 400px;
+}
+
+.diagram {
+    margin-top: 40px;
+}

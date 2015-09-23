@@ -1,6 +1,4 @@
-from django.contrib.auth.models import User
 from django.db import models
-
 # Always aware of translations to other languages in the future -> wrap all texts into _()
 from django.utils.translation import ugettext_lazy as _
 
@@ -15,14 +13,12 @@ class Currency(UnicodeNameMixin, models.Model):
     """
     Default currency will be USD. All rates are USD based.
     """
-    name = models.CharField(max_length=100)
-    short_name = models.CharField(max_length=3)
-    # Highest rate found to USD is BYR (1$ = 17 593.24 BYR) = 7 digits.
-    # 8 digits to be sure anything bigger works.
-    rate = models.DecimalField(max_digits=8, decimal_places=2)
+    name = models.CharField(max_length=3)
+    rate = models.DecimalField(max_digits=6, decimal_places=4)
 
     class Meta:
         verbose_name_plural = 'Currencies'
+
 
 class Fee(models.Model):
     """
@@ -39,7 +35,7 @@ class Fee(models.Model):
         """ Small verbosity added """
         return _(u"%(amount)s %(currency)s") % {
             'amount': self.amount,
-            'currency': self.currency.short_name
+            'currency': self.currency.name
         }
 
 
@@ -48,7 +44,7 @@ class Product(UnicodeNameMixin, models.Model):
     Product model
     """
     name = models.CharField(max_length=255)
-    fee = models.ForeignKey(Fee)
+    fee = models.ForeignKey(Fee, blank=True, null=True)
 
 
 class Event(UnicodeNameMixin, models.Model):
@@ -59,8 +55,9 @@ class Event(UnicodeNameMixin, models.Model):
     # The sum of the fees can be slightly larger then single fee
     total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-    fee = models.ForeignKey(Fee, blank=True, null=True)
-    user = models.ForeignKey(User)
+    fee = models.ForeignKey(Fee)
+
+    products = models.ManyToManyField(Product, through='ProductItem')
 
 
 class ProductItem(models.Model):
