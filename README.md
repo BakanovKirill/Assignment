@@ -31,7 +31,7 @@ $ cd Assignment/
 ```sh
 $ python bootstrap-buildout.py && bin/buildout
 ```
-  - Load some test data into the Sqlite database. Test 
+  - Load some test data into the Sqlite database.  
 
 ```sh
 $ bin/django loaddata users.json
