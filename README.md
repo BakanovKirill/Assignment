@@ -11,6 +11,13 @@ Tasks:
 - Then, write an application that calculates the total service fee given an event and a list of products and quantities. A command line interface to the program is sufficient. The application should be written in Python.
 
 
+# Technologies used:
+
+  - Python2.7
+  - Django 1.8.4
+  - zc.buildout
+  
+
 # Usage
 
   - Clone the repository using ssh:
