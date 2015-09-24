@@ -23,7 +23,6 @@ def index(request):
         total = calculate_total_fast(event).quantize(Decimal('0.01'))
         event.total = total
         event.save()
-        #calculate_total_simple(event)
         return JsonResponse({'total': total})
     data['events'] = events
 

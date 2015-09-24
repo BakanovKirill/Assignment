@@ -71,12 +71,15 @@
             });
 
             $('form').on('submit', function () {
+                var submitBtns= $('input[type=submit]');
+                submitBtns.attr('disabled', 'true');
                 var form = $(this),
                 postData = form.serialize();
                 $.post(form.attr('action'), postData, function (data) {
                     var el = form.find('.total .amount');
                     el.text(data.total);
                     el.parent().show();
+                    submitBtns.removeAttr('disabled');
                 });
                 return false;
             })
