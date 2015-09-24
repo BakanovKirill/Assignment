@@ -21,6 +21,9 @@ def index(request):
         except ObjectDoesNotExist:
             raise Http404
         total = calculate_total_fast(event).quantize(Decimal('0.01'))
+        # We could also check if the total is already saved, but in this simple case there is no handlers
+        # for Product change events to clear total. So we calculate and save it each time.
+        # To go another way i'd use post_save() signal on ProductItem
         event.total = total
         event.save()
         return JsonResponse({'total': total})
