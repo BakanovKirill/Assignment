@@ -14,7 +14,7 @@ def index(request):
     data = {
 
     }
-    events = Event.objects.all().prefetch_related('product_items')
+    events = Event.objects.all().prefetch_related('product_items').select_related('fee__currency')
     if request.method == 'POST':
         try:
             event = events.get(pk=request.POST.get('id',0))

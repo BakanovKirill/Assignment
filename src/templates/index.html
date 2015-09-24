@@ -26,7 +26,7 @@
                     <input type="hidden" name="id" value="{{ id }}"/>
 
                     <div class="products" id="{{ id }}" {% if not forloop.first %}style="display: none;"{% endif %}>
-                        {% for product in event.product_items.all %}
+                        {% for product in event.get_products %}
                             <div class="product clearfix">
                                 <label for="product{{ product.id }}">{% trans 'Product' %}: {{ product.product.name }}</label>
                                 <input title="{% trans 'quantity' %}" id="product{{ product.id }}" class="span8" type="text" value="{{ product.quantity }}" disabled />
@@ -46,7 +46,16 @@
         {% endfor %}
 
         <div class="diagram">
-            <a href="{% static 'img/diagram.png' %}" target="_blank">{% trans 'Click to open database diagram' %}</a>
+            <a href="#imageModal" target="_blank" data-dismiss="modal" data-toggle="modal">
+                {% trans 'Click to open database diagram' %}
+            </a>
+        </div>
+
+        <div class="modal fade in" id="imageModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="heading">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <img src="{% static 'img/diagram.png' %}"/>
         </div>
     </div>
 {% endblock %}

@@ -1,12 +1,12 @@
 from django.db import models
-# Always aware of translations to other languages in the future -> wrap all texts into _()
+# Always aware of translations to other languages in the future -> wrap all static texts into _()
 from django.utils.translation import ugettext_lazy as _
 
 
 class UnicodeNameMixin(object):
 
     def __unicode__(self):
-        return _(u"%s") % self.name
+        return u"%s" % self.name
 
 
 class Currency(UnicodeNameMixin, models.Model):
@@ -17,7 +17,7 @@ class Currency(UnicodeNameMixin, models.Model):
     rate = models.DecimalField(max_digits=6, decimal_places=4)
 
     class Meta:
-        verbose_name_plural = 'Currencies'
+        verbose_name_plural = _('Currencies')
 
 
 class Fee(models.Model):
@@ -33,7 +33,7 @@ class Fee(models.Model):
 
     def __unicode__(self):
         """ Small verbosity added """
-        return _(u"%(amount)s %(currency)s") % {
+        return u"%(amount)s %(currency)s" % {
             'amount': self.amount,
             'currency': self.currency.name
         }
@@ -59,6 +59,8 @@ class Event(UnicodeNameMixin, models.Model):
 
     products = models.ManyToManyField(Product, through='ProductItem')
 
+    def get_products(self):
+        return self.product_items.all().select_related('product__fee__currency')
 
 class ProductItem(models.Model):
     """
@@ -70,7 +72,7 @@ class ProductItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def __unicode__(self):
-        return _(u"%(name)s: %(quantity)s") % {
+        return u"%(name)s: %(quantity)s" % {
             'name': self.product.name,
             'quantity': self.quantity
         }
