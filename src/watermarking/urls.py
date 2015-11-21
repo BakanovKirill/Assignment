@@ -1,4 +1,4 @@
-"""assignment URL Configuration
+"""URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
@@ -21,6 +21,10 @@ from django.contrib import admin
 urlpatterns = [
                   url(r'^admin/', include(admin.site.urls)),
 
-                  url(r'^$', 'assignment.views.index', name='index'),
-              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+                  url(r'^add_watermark/(?P<order_hash>[a-fA-F\d]{32})/$', 'watermarking.views.add_watermark',
+                      name='index'),
+
+
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+              + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

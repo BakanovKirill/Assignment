@@ -2,9 +2,9 @@ __author__ = 'feanor'
 from setuptools import setup, find_packages
 
 setup(
-    name = "assignment",
+    name = "watermarking",
     version = "1.0",
-    url = 'https://github.com/BakanovKirill/Assignment',
+    url = 'https://github.com/BakanovKirill/Watermarking',
     license = 'BSD',
     description = "A test project for PayLogic.",
     author = 'Kirill Bakanov',
