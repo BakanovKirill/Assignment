@@ -41,6 +41,7 @@ Technology requirements:
   - Python2.7
   - Django 1.8.4
   - zc.buildout
+  - Django Rest Framework
   
 
 # Usage
