@@ -119,10 +119,3 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR + '/media/'
-
-
-DEBUG_TOOLBAR_PATCH_SETTINGS = True
-ENABLE_DEBUG_TOOLBAR = True
-if ENABLE_DEBUG_TOOLBAR:
-    MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
-    INSTALLED_APPS = INSTALLED_APPS + ('debug_toolbar',)
