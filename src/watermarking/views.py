@@ -12,10 +12,16 @@ from .utils import validate_url, add_hash_to_file
 
 @api_view(['GET'])
 def add_watermark(request, order_hash):
+    """
+    :param order_hash: string - md5 hash
+    :return: list - all possible combination
+    """
     url = request.query_params.get('url', False)
     validation_data = validate_url(url)
     if validation_data['status']:
         try:
+            if not isinstance(order_hash, basestring) or len(order_hash) > 32:
+                raise Exception('Order hash must be a string up to 32 characters.')
             filename = url.split('/')[-1]
             if '.epub' not in filename:
                 raise Exception('File must be in .epub format.')
